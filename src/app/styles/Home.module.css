@@ -1,28 +1,3 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-.header {
-  background-color: #333;
-  color: #fff;
-  padding: 24px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-}
-
-.headerLink {
-  color: #fff;
-  text-decoration: none;
-}
-
-body {
-  font-family: Arial, sans-serif;
-  margin: 20px 107px;
-  background-color: #ffffff;
-}
-
 .post {
   background-color: #ffffff;
   padding: 20px;
@@ -31,7 +6,7 @@ body {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.post h2 {
+h2 {
   margin-top: 0;
 }
 
@@ -56,7 +31,7 @@ body {
   gap: 10px;
 }
 
-.postCategories li {
+li {
   padding: 5px 10px;
   border-radius: 5px;
   border: solid;
@@ -67,4 +42,18 @@ body {
 
 .postContent {
   line-height: 1.6;
+}
+
+/*ブラウザ標準のCSSが当たっているため、
+特に指定しない場合、ブラウザの使用で、aタグにはunderlineや青文字が適用されてしまう形だったため、以下を追記。*/
+.postLink {
+  text-decoration: none;
+  color: #333;
+}
+
+.postLoading {
+  margin: 20px auto;
+  text-align: center;
+  font-size: 15px;
+  font-weight: bold;
 }

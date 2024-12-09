@@ -1,12 +1,18 @@
 "use client";
-import { useState, useEffect } from "react";
 import type { Post } from "@/app/_types/Post";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-const Page: React.FC = () => {
-  // 投稿データを「状態」として管理 (初期値はnull)
-  const [posts, setPosts] = useState<Post[] | null>(null);
+//src/app/_types/Post.tsのPost定義を型定義に使用している
+//(単一の) 投稿記事 を受け取り、その title と content を表示するコンポーネントとなっている
+interface Props {
+  post: Post;
+}
+
+//<Props>は、[ PostSummary]のコンポーネントが受け取るプロパティ（データ）の型を定義するためのもの.
+//(props)は、`PostSummary`コンポーネントが受け取るプロパティを指す。このプロパティには`post`というオブジェクトが含まれていることが前提
+export const PostSummary: React.FC<Props> = (props) => {
+  const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -24,13 +30,16 @@ const Page: React.FC = () => {
     fetcher();
   }, []);
 
-  //loadingがtrueだったら,28行目が処理される。
-  if (loading) return <div className="text-gray-500">読み込み中…</div>;
+  if (loading)
+    return (
+      <div className="m-5 mx-auto text-center text-sm font-bold">
+        読み込み中…
+      </div>
+    );
 
-  //loadingがfalseかつpostsが空なら,31行目が処理される。
-  if (!posts) return <div className="text-gray-500">投稿がありません、、</div>;
+  if (!posts)
+    return <div className="text-gray-500">記事が見つかりませんでした。</div>;
 
-  //loadingがfalseかつpostsがあるなら, 34行目が処理される。
   return posts.map((post) => (
     <div key={post.id} className="mb-5 rounded-lg bg-white p-5 shadow-md">
       <Link href={`/posts/${post.id}`} className="text-black no-underline">
@@ -42,17 +51,12 @@ const Page: React.FC = () => {
           </p>
           <ul className="m-0 mb-2.5 flex list-none gap-2.5 p-0">
             {post.categories.map((category, index) => (
-              <li
-                className="rounded border border-blue-500 px-2.5 py-[1.25] text-sm text-blue-600"
-                key={index}
-              >
-                {category}
-              </li>
+              <li key={index}>{category}</li>
             ))}
           </ul>
         </div>
 
-        <h2 className="mb-10 text-xl font-bold leading-7">{post.title}</h2>
+        <h2>{post.title}</h2>
         <p
           className="leading-[1.6]"
           dangerouslySetInnerHTML={{ __html: post.content }}
@@ -61,5 +65,3 @@ const Page: React.FC = () => {
     </div>
   ));
 };
-
-export default Page;

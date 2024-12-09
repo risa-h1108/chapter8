@@ -1,0 +1,70 @@
+.wrapper {
+  max-width: 768px;
+  margin: 0 auto;
+}
+
+.img {
+  margin-top: 48px;
+  max-width: 100%;
+  height: auto;
+}
+
+.post {
+  background-color: white;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  margin-top: 0;
+}
+
+.info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.date {
+  color: #888888;
+  font-size: 0.9em;
+  margin-right: 5px;
+}
+
+.categories {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 10px 0;
+  display: flex;
+  gap: 10px;
+}
+
+.categories li {
+  padding: 5px 10px;
+  border-radius: 5px;
+  border: solid;
+  border-color: #4e7dff;
+  font-size: 0.9em;
+  color: rgb(9, 102, 252);
+}
+
+.content {
+  line-height: 1.6;
+}
+
+/*rem:相対単位。`px`（ピクセル）などの絶対単位とは違い、他の要素のサイズに依存するという意味。*/
+.postError {
+  margin: 2rem auto; /*ルート要素のフォントサイズの2倍の大きさを上下のマージンに設定し、左右は自動で中央揃えになるようにしている*/
+  text-align: center;
+  font-size: 1.5rem; /*ルート要素のフォントサイズの1.5倍の大きさを指定している*/
+  font-weight: bold;
+}
+
+.postLoading {
+  margin: 20px auto;
+  font-size: 15px;
+  font-weight: bold;
+}
