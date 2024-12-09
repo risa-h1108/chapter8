@@ -1,5 +1,5 @@
 "use client";
-import type { Post } from "@/app/_types/Post";
+import { MicroCmsPost } from "@/app/_types/MicroCmsPost";
 import React, { useEffect, useState } from "react";
 // Next.jsのフックで、現在のページのURLパラメータを取得するために使います。例えば、URLが`/posts/1`の場合、`1`というパラメータを取得できます。
 import { useParams } from "next/navigation";
@@ -10,7 +10,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const Detail: React.FC = () => {
   const { id } = useParams();
-  const [post, setPost] = useState<Post | null>(null);
+  //ここで返ってきたデータを入れる、MicroCmsPost[]で返ってくるので、postsではなくこれを入れる。
+  const [post, setPost] = useState<MicroCmsPost | null>(null);
   const [loading, setLoading] = useState(false);
 
   // APIでpostsを取得する処理をuseEffectで実行します。
@@ -18,12 +19,19 @@ const Detail: React.FC = () => {
     const fetcher = async () => {
       setLoading(true);
       const res = await fetch(
-        `https://1hmfpsvto6.execute-api.ap-northeast-1.amazonaws.com/dev/posts/${id}`
+        `https://2s94i47buf.microcms.io/api/v1/posts/${id}`,
+        {
+          headers: {
+            "X-MICROCMS-API-KEY": process.env
+              .NEXT_PUBLIC_MICROCMS_API_KEY as string,
+          },
+        }
       );
+
       //Home.tsxと異なり、Detailでは特定の投稿1件を扱うため、レスポンスが`{ post: {...} }`という形式。
       //そのため、`const { posts }`と書くことはできない
-      const data = await res.json();
-      setPost(data.post);
+      const data: MicroCmsPost = await res.json();
+      setPost(data);
       setLoading(false);
     };
 
@@ -43,7 +51,7 @@ const Detail: React.FC = () => {
     <Link href={`/posts/${post.id}`}>
       <div className="mx-auto my-0 w-96 max-w-3xl">
         <Image
-          src={post.thumbnailUrl}
+          src={post.thumbnail.url}
           alt="sampleImage"
           //ここで画像の高さと幅を書かないとエラーがでる。
           width={800}
@@ -59,14 +67,14 @@ const Detail: React.FC = () => {
                 className="rounded border border-blue-500 px-2.5 py-[1.25] text-sm text-blue-600"
                 key={id}
               >
-                {category}
+                {category.name}
               </li>
             ))}
           </ul>
         </div>
-        <h2 className="mb-10 text-xl font-bold leading-7">{post.title}</h2>
+        <h2 className="mb-10 text-xl font-bold leading-7 ">{post.title}</h2>
         <p
-          className="leading-[1.6]"
+          className="leading-[1.6] "
           dangerouslySetInnerHTML={{ __html: post.content }}
         />
       </div>
