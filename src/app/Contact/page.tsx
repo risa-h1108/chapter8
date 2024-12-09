@@ -94,13 +94,11 @@ const Contact: React.FC = () => {
             </div>
           </div>
 
-          <div className="w-full">
-            <label className="w-full rounded-md border border-gray-300 p-4">
-              本文
-            </label>
-            <div className="w-full">
+          <div className="flex ">
+            <label className=" w-80 border-gray-300 p-4">本文</label>
+            <div className="flex w-full">
               <textarea
-                className="w-full rounded-md border border-gray-300 p-4"
+                className="w-96 rounded-md border border-gray-300 p-4"
                 rows={8} //rows={8}は、テキストエリアの高さを8行分に設定しています。
                 {...register("message", {
                   required: "本文は必須です。",
