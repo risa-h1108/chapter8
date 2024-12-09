@@ -1,23 +1,30 @@
 "use client";
 import { useState, useEffect } from "react";
 import type { Post } from "@/app/_types/Post";
+import { PostSummary } from "./_components/PostSummary";
+
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { MicroCmsPost } from "./_types/MicroCmsPost";
 
 const Page: React.FC = () => {
   // 投稿データを「状態」として管理 (初期値はnull)
-  const [posts, setPosts] = useState<Post[] | null>(null);
+  const [posts, setPosts] = useState<MicroCmsPost[] | null>(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetcher = async () => {
-      const res = await fetch(
-        "https://1hmfpsvto6.execute-api.ap-northeast-1.amazonaws.com/dev/posts"
-      );
+      const res = await fetch("https://2s94i47buf.microcms.io/api/v1/posts", {
+        headers: {
+          "X-MICROCMS-API-KEY": process.env
+            .NEXT_PUBLIC_MICROCMS_API_KEY as string,
+        },
+      });
+
       //分割代入でconst {posts}=...は書かれている。 { posts: Post[] } は { posts　}の型指定。
       //複数の投稿を扱うため、レスポンスが`{ posts: [...] }`という形式。だから、以下のようにかける。
-      const { posts }: { posts: Post[] } = await res.json();
-      setPosts(posts);
+      const { contents }: { contents: MicroCmsPost[] } = await res.json();
+      setPosts(contents);
       setLoading(false);
     };
 
@@ -46,7 +53,7 @@ const Page: React.FC = () => {
                 className="rounded border border-blue-500 px-2.5 py-[1.25] text-sm text-blue-600"
                 key={index}
               >
-                {category}
+                {category.name}
               </li>
             ))}
           </ul>
@@ -54,7 +61,7 @@ const Page: React.FC = () => {
 
         <h2 className="mb-10 text-xl font-bold leading-7">{post.title}</h2>
         <p
-          className="leading-[1.6]"
+          className="line-clamp-3 leading-[1.6]"
           dangerouslySetInnerHTML={{ __html: post.content }}
         />
       </Link>
