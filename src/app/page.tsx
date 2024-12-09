@@ -42,12 +42,17 @@ const Page: React.FC = () => {
           </p>
           <ul className="m-0 mb-2.5 flex list-none gap-2.5 p-0">
             {post.categories.map((category, index) => (
-              <li key={index}>{category}</li>
+              <li
+                className="rounded border border-blue-500 px-2.5 py-[1.25] text-sm text-blue-600"
+                key={index}
+              >
+                {category}
+              </li>
             ))}
           </ul>
         </div>
 
-        <h2>{post.title}</h2>
+        <h2 className="mb-10 text-xl font-bold leading-7">{post.title}</h2>
         <p
           className="leading-[1.6]"
           dangerouslySetInnerHTML={{ __html: post.content }}

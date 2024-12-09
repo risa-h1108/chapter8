@@ -8,7 +8,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-const Page: React.FC = () => {
+const Detail: React.FC = () => {
   const { id } = useParams();
   const [post, setPost] = useState<Post | null>(null);
   const [loading, setLoading] = useState(false);
@@ -41,25 +41,30 @@ const Page: React.FC = () => {
 
   return (
     <Link href={`/posts/${post.id}`}>
-      <div className="mb-1 text-lg font-bold">{post.title}</div>
-      <div
-        className="line-clamp-3"
-        dangerouslySetInnerHTML={{ __html: post.content }}
-      />
-
-      <div className="mx-auto my-0 max-w-3xl">
-        <Image src={post.thumbnailUrl} alt="sampleImage" />
+      <div className="mx-auto my-0 w-96 max-w-3xl">
+        <Image
+          src={post.thumbnailUrl}
+          alt="sampleImage"
+          //ここで画像の高さと幅を書かないとエラーがでる。
+          width={800}
+          height={400}
+        />
         <div className="mb-[10px] flex items-center justify-between">
           <div className="mr-1 text-sm text-[#888888]">
             {new Date(post.createdAt).toLocaleDateString()}
           </div>
           <ul className="m-0 mb-2.5 flex list-none gap-2.5 p-0">
             {post.categories.map((category, id) => (
-              <li key={id}>{category}</li>
+              <li
+                className="rounded border border-blue-500 px-2.5 py-[1.25] text-sm text-blue-600"
+                key={id}
+              >
+                {category}
+              </li>
             ))}
           </ul>
         </div>
-        <h2>{post.title}</h2>
+        <h2 className="mb-10 text-xl font-bold leading-7">{post.title}</h2>
         <p
           className="leading-[1.6]"
           dangerouslySetInnerHTML={{ __html: post.content }}
@@ -69,4 +74,4 @@ const Page: React.FC = () => {
   );
 };
 
-export default Page;
+export default Detail;

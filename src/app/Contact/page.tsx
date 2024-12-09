@@ -8,7 +8,7 @@ interface FormValues {
   message: string;
 }
 
-export const Contact: React.FC = () => {
+const Contact: React.FC = () => {
   const {
     register,
     handleSubmit,
@@ -146,3 +146,5 @@ export const Contact: React.FC = () => {
     </>
   );
 };
+
+export default Contact;
