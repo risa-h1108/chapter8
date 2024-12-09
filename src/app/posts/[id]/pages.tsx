@@ -8,7 +8,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-export const Page: React.FC = () => {
+const Page: React.FC = () => {
   const { id } = useParams();
   const [post, setPost] = useState<Post | null>(null);
   const [loading, setLoading] = useState(false);
@@ -68,3 +68,5 @@ export const Page: React.FC = () => {
     </Link>
   );
 };
+
+export default Page;
