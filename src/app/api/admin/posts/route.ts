@@ -28,6 +28,8 @@ export const GET = async (request: NextRequest) => {
       },
     });
 
+    console.log(posts);
+
     return NextResponse.json({ status: "OK", posts: posts }, { status: 200 });
   } catch (error) {
     if (error instanceof Error)
@@ -69,7 +71,24 @@ export const POST = async (request: Request, context: any) => {
     //element は、`iterable` の現在の要素を表します。
     // iterable は、配列やその他のイテラブルオブジェクト
     for (const category of categories) {
+      // カテゴリが存在するか確認
+      const existingCategory = await prisma.category.findUnique({
+        where: { id: category.id },
+      });
+
+      // カテゴリが存在しない場合はエラーを返す
+      if (!existingCategory) {
+        return NextResponse.json(
+          {
+            status: "error",
+            message: `カテゴリID ${category.id} が存在しません。`,
+          },
+          { status: 400 }
+        );
+      }
+
       // categories に含まれる各カテゴリについて、`prisma.postCategory.create` を使って記事とカテゴリの関連をデータベースに保存
+      // カテゴリが存在する場合は、記事とカテゴリの関連を作成
       await prisma.postCategory.create({
         data: {
           categoryId: category.id,
