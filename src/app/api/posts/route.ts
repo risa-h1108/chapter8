@@ -10,6 +10,7 @@ export const GET = async (request: NextRequest) => {
   //try...(実施/取得内容)catch...（エラー内容）
   try {
     // Postの一覧をDBから取得
+    //posts: Post[] のままでは「型」の不一致によるエラーが発生する可能性があるため
     const posts = await prisma.post.findMany({
       include: {
         // カテゴリーも含めて取得
@@ -30,6 +31,8 @@ export const GET = async (request: NextRequest) => {
         createdAt: "desc",
       },
     });
+
+    console.log(posts);
 
     // レスポンスを返す
     return NextResponse.json({ status: "OK", posts: posts }, { status: 200 });

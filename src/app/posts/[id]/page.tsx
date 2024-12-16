@@ -1,5 +1,5 @@
 "use client";
-import { MicroCmsPost } from "@/app/_types/MicroCmsPost";
+import { MicroCmsPost } from "@/app/types/MicroCmsPost";
 import React, { useEffect, useState } from "react";
 // Next.jsのフックで、現在のページのURLパラメータを取得するために使います。例えば、URLが`/posts/1`の場合、`1`というパラメータを取得できます。
 import { useParams } from "next/navigation";

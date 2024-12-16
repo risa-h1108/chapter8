@@ -27,7 +27,7 @@ export const GET = async (
         },
       },
     });
-
+    console.log(post?.id);
     return NextResponse.json({ status: "OK", post: post }, { status: 200 });
   } catch (error) {
     if (error instanceof Error)
@@ -54,6 +54,7 @@ export const PUT = async (
   // リクエストのbodyを取得
   const { title, content, categories, thumbnailUrl }: UpdatePostRequestBody =
     await request.json();
+  console.log(categories);
 
   try {
     // idを指定して、Postを更新
