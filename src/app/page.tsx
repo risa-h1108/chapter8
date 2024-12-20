@@ -1,11 +1,11 @@
 "use client";
 import { useState, useEffect } from "react";
-import type { Post } from "@/app/_types/Post";
+import type { Post } from "@/app/types/Post";
 import { PostSummary } from "./_components/PostSummary";
 
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { MicroCmsPost } from "./_types/MicroCmsPost";
+import { MicroCmsPost } from "./types/MicroCmsPost";
 
 const Page: React.FC = () => {
   // 投稿データを「状態」として管理 (初期値はnull)

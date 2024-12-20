@@ -6,7 +6,7 @@ export type Post = {
   title: string;
   thumbnailUrl: string;
   createdAt: string;
-  categories: string[];
+  postCategories: Category[];
   content: string;
   coverImage: CoverImage;
 };

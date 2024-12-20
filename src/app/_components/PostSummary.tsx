@@ -1,5 +1,5 @@
 "use client";
-import type { Post } from "@/app/_types/Post";
+import type { Post } from "@/app/types/Post";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 
