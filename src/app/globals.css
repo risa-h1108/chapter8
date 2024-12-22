@@ -4,6 +4,10 @@
 
 .header {
   background-color: #333;
+  width: 100vw;
+}
+
+.headerLinkWrapper {
   color: #fff;
   padding: 14px;
   font-weight: bold;
@@ -11,7 +15,6 @@
   justify-content: space-between;
   align-items: center;
 }
-
 .headerLink {
   color: #fff;
   text-decoration: none;

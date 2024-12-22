@@ -21,21 +21,14 @@ export default function Page() {
   useEffect(() => {
     const fetcher = async () => {
       setLoading(true);
-      const res = await fetch(
-        `https://2s94i47buf.microcms.io/api/v1/posts/${id}`,
-        {
-          headers: {
-            "X-MICROCMS-API-KEY": process.env
-              .NEXT_PUBLIC_MICROCMS_API_KEY as string,
-          },
-        }
-      );
+      const res = await fetch(`/api/posts/${id}`);
+
       console.log(id); // ここでIDを確認
 
       //Home.tsxと異なり、Detailでは特定の投稿1件を扱うため、レスポンスが`{ post: {...} }`という形式。
       //そのため、`const { posts }`と書くことはできない
-      const data: MicroCmsPost = await res.json();
-      setPost(data);
+      const { post } = await res.json();
+      setPost(post);
       setLoading(false);
     };
 
@@ -57,7 +50,7 @@ export default function Page() {
     <Link href={`/posts/${post.id}`}>
       <div className="mx-auto my-0 w-96 max-w-3xl">
         <Image
-          src={post.thumbnail.url}
+          src={post.thumbnailUrl || ""}
           alt="sampleImage"
           //ここで画像の高さと幅を書かないとエラーがでる。
           width={800}
@@ -68,7 +61,7 @@ export default function Page() {
             {new Date(post.createdAt).toLocaleDateString()}
           </div>
           <ul className="m-0 mb-2.5 flex list-none gap-2.5 p-0">
-            {post.categories.map((category, id) => (
+            {post.categories?.map((category, id) => (
               <li
                 className="rounded border border-blue-500 px-2.5 py-[1.25] text-sm text-blue-600"
                 key={id}

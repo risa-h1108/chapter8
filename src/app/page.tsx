@@ -14,19 +14,18 @@ export default function Page() {
 
   useEffect(() => {
     const fetcher = async () => {
-      const res = await fetch("https://2s94i47buf.microcms.io/api/v1/posts", {
-        headers: {
-          "X-MICROCMS-API-KEY": process.env
-            .NEXT_PUBLIC_MICROCMS_API_KEY as string,
-        },
-      });
+      const res = await fetch(`/api/posts`);
 
       //分割代入でconst {posts}=...は書かれている。 { posts: Post[] } は { posts　}の型指定。
       //複数の投稿を扱うため、レスポンスが`{ posts: [...] }`という形式。だから、以下のようにかける。
-      const { contents }: { contents: MicroCmsPost[] } = await res.json();
-      setPosts(contents);
+      // const { posts } = await res.json();
+      const data = await res.json();
+      console.log(data);
+
+      setPosts(data.posts);
       setLoading(false);
     };
+    console.log(posts);
 
     fetcher();
   }, []);
@@ -48,7 +47,7 @@ export default function Page() {
             {new Date(post.createdAt).toLocaleDateString()}
           </p>
           <ul className="m-0 mb-2.5 flex list-none gap-2.5 p-0">
-            {post.categories.map((category, index) => (
+            {post.categories?.map((category, index) => (
               <li
                 className="rounded border border-blue-500 px-2.5 py-[1.25] text-sm text-blue-600"
                 key={index}
