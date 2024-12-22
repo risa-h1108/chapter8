@@ -7,7 +7,7 @@ import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { MicroCmsPost } from "./types/MicroCmsPost";
 
-const Page: React.FC = () => {
+export default function Page() {
   // 投稿データを「状態」として管理 (初期値はnull)
   const [posts, setPosts] = useState<MicroCmsPost[] | null>(null);
   const [loading, setLoading] = useState(false);
@@ -67,6 +67,4 @@ const Page: React.FC = () => {
       </Link>
     </div>
   ));
-};
-
-export default Page;
+}

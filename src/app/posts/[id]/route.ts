@@ -10,6 +10,12 @@ export const GET = async (
   // paramsの中にidが入っているので、それを取り出す
   const { id } = params;
 
+  // // IDが整数であることを確認
+  // const postId = parseInt(id, 10);
+  // if (isNaN(postId)) {
+  //   return NextResponse.json({ status: "Invalid ID format" }, { status: 400 });
+  // }
+
   try {
     // idを元にPostをDBから取得
     const post = await prisma.post.findUnique({
