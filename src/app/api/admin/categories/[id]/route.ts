@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { Category, PrismaClient } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
@@ -19,9 +19,10 @@ export const GET = async (
     return NextResponse.json({ status: "OK", category }, { status: 200 });
   } catch (error) {
     if (error instanceof Error)
-      return NextResponse.json({ status: error.message }, { status: 400 });
+      return NextResponse.json({ status: error.message }, { status: 500 });
   }
 };
+console.log(GET);
 
 // カテゴリーの更新時に送られてくるリクエストのbodyの型
 interface UpdateCategoryRequestBody {

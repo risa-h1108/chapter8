@@ -4,7 +4,6 @@ import { useState } from "react";
 import { useRouter } from "next/navigation"; //Next.jsの機能のひとつで、ページ間の移動をプログラムで制御するために使う
 import { PostForm } from "@/app/admin/_components/PostForm"; //`PostForm`という名前のコンポーネントを持ってくるため
 import { Category } from "@/app/types/Category"; //Category`という名前の型（TypeScriptの型）を持ってくるため
-import { useEffect } from "react";
 
 export default function Page() {
   const [title, setTitle] = useState(""); //`title`という状態（変数）と、その状態を更新するための関数`setTitle`を定義.("")は初期値で、ここでは空の文字列を設定
@@ -17,7 +16,6 @@ export default function Page() {
   const [categories, setCategories] = useState<Category[]>([]);
 
   const router = useRouter(); //`router`を使うことでボタンをクリックしたときに別のページに移動する、といった操作ができる
-  console.log(categories);
 
   //e:フォームが送信されるときに発生するイベントの情報
   //`React.FormEvent`は、このイベントがフォームに関するものであることを示している
@@ -50,18 +48,6 @@ export default function Page() {
     //「記事を作成しました。」というメッセージを表示して、ユーザーに記事が無事に作成されたことを知らせている
     alert("記事を作成しました。");
   };
-  console.log(categories);
-
-  useEffect(() => {
-    const fetchCategories = async () => {
-      const res = await fetch("/api/admin/categories");
-      const { categories } = await res.json();
-      setCategories(categories);
-    };
-
-    fetchCategories();
-  }, []);
-  console.log(categories);
 
   return (
     //`container`は中央にコンテンツを配置するためのクラスで、

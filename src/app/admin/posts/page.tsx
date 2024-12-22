@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Post } from "@/app/types/Post";
 
-const Page: React.FC = () => {
+export default function Page() {
   const [posts, setPosts] = useState<Post[]>([]);
 
   useEffect(() => {
@@ -53,6 +53,4 @@ const Page: React.FC = () => {
       </div>
     </div>
   );
-};
-
-export default Page;
+}

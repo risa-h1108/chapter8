@@ -1,4 +1,5 @@
 "use client";
+
 import { MicroCmsPost } from "@/app/types/MicroCmsPost";
 import React, { useEffect, useState } from "react";
 // Next.jsのフックで、現在のページのURLパラメータを取得するために使います。例えば、URLが`/posts/1`の場合、`1`というパラメータを取得できます。
@@ -8,8 +9,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-const Detail: React.FC = () => {
+export default function Page() {
   const { id } = useParams();
+  console.log("ID:", id); // ここでIDを確認
+
   //ここで返ってきたデータを入れる、MicroCmsPost[]で返ってくるので、postsではなくこれを入れる。
   const [post, setPost] = useState<MicroCmsPost | null>(null);
   const [loading, setLoading] = useState(false);
@@ -27,6 +30,7 @@ const Detail: React.FC = () => {
           },
         }
       );
+      console.log(id); // ここでIDを確認
 
       //Home.tsxと異なり、Detailでは特定の投稿1件を扱うため、レスポンスが`{ post: {...} }`という形式。
       //そのため、`const { posts }`と書くことはできない
@@ -37,6 +41,8 @@ const Detail: React.FC = () => {
 
     fetcher();
   }, [id]);
+
+  console.log(id); // ここでIDを確認
 
   if (loading)
     return (
@@ -80,6 +86,4 @@ const Detail: React.FC = () => {
       </div>
     </Link>
   );
-};
-
-export default Detail;
+}
