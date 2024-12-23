@@ -1,24 +1,17 @@
 "use client";
 import { useState, useEffect } from "react";
 import type { Post } from "@/app/types/Post";
-import { PostSummary } from "./_components/PostSummary";
-
 import Link from "next/link";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { MicroCmsPost } from "./types/MicroCmsPost";
 
 export default function Page() {
   // 投稿データを「状態」として管理 (初期値はnull)
-  const [posts, setPosts] = useState<MicroCmsPost[] | null>(null);
+  const [posts, setPosts] = useState<Post[] | null>(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetcher = async () => {
       const res = await fetch(`/api/posts`);
 
-      //分割代入でconst {posts}=...は書かれている。 { posts: Post[] } は { posts　}の型指定。
-      //複数の投稿を扱うため、レスポンスが`{ posts: [...] }`という形式。だから、以下のようにかける。
-      // const { posts } = await res.json();
       const data = await res.json();
       console.log(data);
 
@@ -47,12 +40,12 @@ export default function Page() {
             {new Date(post.createdAt).toLocaleDateString()}
           </p>
           <ul className="m-0 mb-2.5 flex list-none gap-2.5 p-0">
-            {post.categories?.map((category, index) => (
+            {post.postCategories?.map((category, index) => (
               <li
                 className="rounded border border-blue-500 px-2.5 py-[1.25] text-sm text-blue-600"
                 key={index}
               >
-                {category.name}
+                {category.id}
               </li>
             ))}
           </ul>

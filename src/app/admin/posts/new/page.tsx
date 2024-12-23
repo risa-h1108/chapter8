@@ -25,28 +25,33 @@ export default function Page() {
     // サーバーにデータを送信して記事を作成します。
     //`res`は、`fetch`関数が返すレスポンス（応答）を受け取るための変数
     //fetch('/api/admin/posts', { ... }):記事を作成するためのリクエストを送る
-    const res = await fetch("/api/admin/posts", {
-      method: "POST", //POSTメソッドは、サーバーに新しいデータを送信するときに使う。ここでは記事のデータをサーバーに送って新しい記事を作成
-      //headers:リクエストに関する追加情報を指定するため
-      headers: {
-        "Content-Type": "application/json", //送信するデータがJSON形式であることを示す
-      },
-      //body:サーバーに送信するデータの内容
-      //JSON.stringify:JavaScriptのオブジェクトをJSON形式の文字列に変換する関数
-      body: JSON.stringify({ title, content, thumbnailUrl, categories }), //`title`（タイトル）、`content`（内容）、`thumbnailUrl`（サムネイルのURL）、`categories`（カテゴリー）を含むオブジェクトをJSON形式に変換して送信
-    });
+    try {
+      const res = await fetch("/api/admin/posts", {
+        method: "POST", //POSTメソッドは、サーバーに新しいデータを送信するときに使う。ここでは記事のデータをサーバーに送って新しい記事を作成
+        //headers:リクエストに関する追加情報を指定するため
+        headers: {
+          "Content-Type": "application/json", //送信するデータがJSON形式であることを示す
+        },
+        //body:サーバーに送信するデータの内容
+        //JSON.stringify:JavaScriptのオブジェクトをJSON形式の文字列に変換する関数
+        body: JSON.stringify({ title, content, thumbnailUrl, categories }), //`title`（タイトル）、`content`（内容）、`thumbnailUrl`（サムネイルのURL）、`categories`（カテゴリー）を含むオブジェクトをJSON形式に変換して送信
+      });
 
-    // レスポンスから作成した記事のIDを取得します。
-    // ここで取得している`id`は、サーバーが(POSTで)返してきた新しく作成された記事のID.
-    const { id } = await res.json(); //レスポンスから取得したデータの中から`id`というプロパティを取り出している
+      // レスポンスから作成した記事のIDを取得します。
+      // ここで取得している`id`は、サーバーが(POSTで)返してきた新しく作成された記事のID.
+      const { id } = await res.json(); //レスポンスから取得したデータの中から`id`というプロパティを取り出している
 
-    // 作成した記事の編集ページに遷移します。
-    //router.push():Next.jsの`useRouter`フックで提供されるメソッドで、指定したURL「()内のURL」にページを移動させるために使う
-    router.push(`/admin/posts/${id}`);
+      // 作成した記事の編集ページに遷移します。
+      //router.push():Next.jsの`useRouter`フックで提供されるメソッドで、指定したURL「()内のURL」にページを移動させるために使う
+      router.push(`/admin/posts/${id}`);
 
-    //alert():ブラウザでポップアップメッセージを表示するための関数
-    //「記事を作成しました。」というメッセージを表示して、ユーザーに記事が無事に作成されたことを知らせている
-    alert("記事を作成しました。");
+      //alert():ブラウザでポップアップメッセージを表示するための関数
+      //「記事を作成しました。」というメッセージを表示して、ユーザーに記事が無事に作成されたことを知らせている
+      alert("記事を作成しました。");
+    } catch (error) {
+      console.error("Error creating post:", error);
+      alert("記事の作成に失敗しました。もう一度実施してください。");
+    }
   };
 
   return (

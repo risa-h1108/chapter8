@@ -39,7 +39,7 @@ export default function Page() {
       alert("記事を更新しました。");
     } catch (error) {
       console.error("Error fetching post:", error);
-      alert("失敗しました。");
+      alert("失敗しました。もう一度お試しください。");
     }
   };
   //記事を削除する
@@ -55,13 +55,17 @@ export default function Page() {
     if (!confirm("記事を削除しますか？"))
       // return:ユーザーが削除をキャンセルした場合、関数を終了させる
       return;
+    try {
+      await fetch(`/api/admin/posts/${id}`, {
+        //指定したリソースを削除するリクエストを送信
+        method: "DELETE",
+      });
 
-    await fetch(`/api/admin/posts/${id}`, {
-      //指定したリソースを削除するリクエストを送信
-      method: "DELETE",
-    });
-
-    alert("記事を削除しました。");
+      alert("記事を削除しました。");
+    } catch (error) {
+      console.error("Error deleting posts:", error);
+      alert("記事の削除に失敗しました。再度実施してください。");
+    }
 
     // ページ遷移を行うための関数
     //削除後に管理者用の投稿一覧ページ`/admin/posts`にリダイレクトする
@@ -100,6 +104,7 @@ export default function Page() {
         }
       } catch (error) {
         console.error("Error fetching post:", error);
+        alert("記事の更新に失敗しました。もう一度お試しください。");
       }
     };
 
