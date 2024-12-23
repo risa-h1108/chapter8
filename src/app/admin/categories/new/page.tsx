@@ -12,21 +12,29 @@ export default function Page() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault(); //フォームのデフォルトの動作をなしにする
 
-    const res = await fetch(
-      "/api/admin/categories", //データを送る先のURL
-      {
-        method: "POST", //「新しいものを作りたいよ」という意味
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ name }), //送るデータの中身
+    try {
+      const res = await fetch(
+        "/api/admin/categories", //データを送る先のURL
+        {
+          method: "POST", //「新しいものを作りたいよ」という意味
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ name }), //送るデータの中身
+        }
+      );
+      if (!res.ok) {
+        throw new Error("Failed to create category");
       }
-    );
 
-    // レスポンスから作成したカテゴリーのIDを取得します。
-    const { id } = await res.json();
-    router.push(`/admin/categories/${id}`);
-    alert("カテゴリーを作成しました。");
+      // レスポンスから作成したカテゴリーのIDを取得します。
+      const { id } = await res.json();
+      router.push(`/admin/categories/${id}`);
+      alert("カテゴリーを作成しました。");
+    } catch (error) {
+      console.error("Error creating category:", error);
+      alert("カテゴリーの作成に失敗しました。もう一度ご実施ください。");
+    }
   };
 
   return (

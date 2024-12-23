@@ -1,6 +1,6 @@
 "use client";
 
-import { MicroCmsPost } from "@/app/types/MicroCmsPost";
+import { Post } from "@/app/types/Post";
 import React, { useEffect, useState } from "react";
 // Next.jsのフックで、現在のページのURLパラメータを取得するために使います。例えば、URLが`/posts/1`の場合、`1`というパラメータを取得できます。
 import { useParams } from "next/navigation";
@@ -13,8 +13,7 @@ export default function Page() {
   const { id } = useParams();
   console.log("ID:", id); // ここでIDを確認
 
-  //ここで返ってきたデータを入れる、MicroCmsPost[]で返ってくるので、postsではなくこれを入れる。
-  const [post, setPost] = useState<MicroCmsPost | null>(null);
+  const [post, setPost] = useState<Post | null>(null);
   const [loading, setLoading] = useState(false);
 
   // APIでpostsを取得する処理をuseEffectで実行します。
@@ -61,12 +60,12 @@ export default function Page() {
             {new Date(post.createdAt).toLocaleDateString()}
           </div>
           <ul className="m-0 mb-2.5 flex list-none gap-2.5 p-0">
-            {post.categories?.map((category, id) => (
+            {post.postCategories?.map((category, id) => (
               <li
                 className="rounded border border-blue-500 px-2.5 py-[1.25] text-sm text-blue-600"
                 key={id}
               >
-                {category.name}
+                {category.id}
               </li>
             ))}
           </ul>

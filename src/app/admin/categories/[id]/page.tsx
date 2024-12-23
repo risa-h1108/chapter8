@@ -17,27 +17,45 @@ export default function Page() {
     e.preventDefault(); //フォームが送信されたときに、ブラウザが持っている「デフォルトの動作」を止めるため
 
     // カテゴリーを作成します。
-    await fetch(`/api/admin/categories/${id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ name }), //カテゴリー名を表示
-    });
+    try {
+      const res = await fetch(`/api/admin/categories/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name }), //カテゴリー名を表示
+      });
 
-    alert("カテゴリーを更新しました。");
+      if (!res.ok) {
+        throw new Error("Failed to update category");
+      }
+
+      alert("カテゴリーを更新しました。");
+    } catch (error) {
+      console.error("Error updating category:", error);
+      alert("カテゴリーの更新に失敗しました。もう一度お試しください。");
+    }
   };
 
   const handleDeletePost = async () => {
     //ユーザーがキャンセルする場合、「!confirm（確認内容の否定）」になるから、削除しないことになる。つまり、returnで処理終了。
     if (!confirm("カテゴリーを削除しますか？")) return;
 
-    //ユーザーが削除（OK）する場合、「confirm（確認内容の否定「＝！」の否定「＝削除」で肯定）」になる。なので、await fetch以降の処理が走る。
-    await fetch(`/api/admin/categories/${id}`, {
-      method: "DELETE",
-    });
-    alert("カテゴリーを削除しました。");
-    router.push("/admin/categories");
+    try {
+      //ユーザーが削除（OK）する場合、「confirm（確認内容の否定「＝！」の否定「＝削除」で肯定）」になる。なので、await fetch以降の処理が走る。
+      const res = await fetch(`/api/admin/categories/${id}`, {
+        method: "DELETE",
+      });
+      if (!res.ok) {
+        throw new Error("Failed to delete category");
+      }
+
+      alert("カテゴリーを削除しました。");
+      router.push("/admin/categories");
+    } catch (error) {
+      console.error("Error deleting category:", error);
+      alert("カテゴリーの削除に失敗しました。もう一度お試しください。");
+    }
   };
 
   //`id`が変わるたびにデータを取得するように設定
@@ -55,7 +73,7 @@ export default function Page() {
   return (
     <div className="container mx-auto px-4">
       <div className="mb-8">
-        <h1 className="text-2xl font-bold mb-4">カテゴリー編集</h1>
+        <h1 className="mb-4 text-2xl font-bold">カテゴリー編集</h1>
       </div>
 
       <CategoryForm
