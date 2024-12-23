@@ -1,12 +1,12 @@
+import { Category } from "./Category";
 import { CoverImage } from "./CoverImage";
-import { PostCategory } from "./PostCategory";
 
 export type Post = {
   id: number;
   title: string;
   thumbnailUrl: string;
   createdAt: string;
-  postCategories: PostCategory[];
+  categories: string[];
   content: string;
   coverImage: CoverImage;
 };

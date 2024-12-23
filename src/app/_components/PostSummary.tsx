@@ -1,5 +1,5 @@
 "use client";
-import type { Post } from "@/app/types/Post";
+import type { Post } from "@/app/_types/Post";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 
@@ -50,8 +50,8 @@ export const PostSummary: React.FC<Props> = (props) => {
             {new Date(post.createdAt).toLocaleDateString()}
           </p>
           <ul className="m-0 mb-2.5 flex list-none gap-2.5 p-0">
-            {post.postCategories.map((category, index) => (
-              <li key={index}>{category.id}</li> //category全体を渡すのではなく、`category.id`という文字列を渡すことで、Reactが期待する`ReactNode`型に合致する。
+            {post.categories.map((category, index) => (
+              <li key={index}>{category}</li>
             ))}
           </ul>
         </div>
