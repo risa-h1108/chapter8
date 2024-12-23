@@ -1,5 +1,6 @@
 "use client";
-import { MicroCmsPost } from "@/app/_types/MicroCmsPost";
+
+import { Post } from "@/app/types/Post";
 import React, { useEffect, useState } from "react";
 // Next.jsのフックで、現在のページのURLパラメータを取得するために使います。例えば、URLが`/posts/1`の場合、`1`というパラメータを取得できます。
 import { useParams } from "next/navigation";
@@ -8,35 +9,32 @@ import Image from "next/image";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-const Detail: React.FC = () => {
+export default function Page() {
   const { id } = useParams();
-  //ここで返ってきたデータを入れる、MicroCmsPost[]で返ってくるので、postsではなくこれを入れる。
-  const [post, setPost] = useState<MicroCmsPost | null>(null);
+  console.log("ID:", id); // ここでIDを確認
+
+  const [post, setPost] = useState<Post | null>(null);
   const [loading, setLoading] = useState(false);
 
   // APIでpostsを取得する処理をuseEffectで実行します。
   useEffect(() => {
     const fetcher = async () => {
       setLoading(true);
-      const res = await fetch(
-        `https://2s94i47buf.microcms.io/api/v1/posts/${id}`,
-        {
-          headers: {
-            "X-MICROCMS-API-KEY": process.env
-              .NEXT_PUBLIC_MICROCMS_API_KEY as string,
-          },
-        }
-      );
+      const res = await fetch(`/api/posts/${id}`);
+
+      console.log(id); // ここでIDを確認
 
       //Home.tsxと異なり、Detailでは特定の投稿1件を扱うため、レスポンスが`{ post: {...} }`という形式。
       //そのため、`const { posts }`と書くことはできない
-      const data: MicroCmsPost = await res.json();
-      setPost(data);
+      const { post } = await res.json();
+      setPost(post);
       setLoading(false);
     };
 
     fetcher();
   }, [id]);
+
+  console.log(id); // ここでIDを確認
 
   if (loading)
     return (
@@ -51,7 +49,7 @@ const Detail: React.FC = () => {
     <Link href={`/posts/${post.id}`}>
       <div className="mx-auto my-0 w-96 max-w-3xl">
         <Image
-          src={post.thumbnail.url}
+          src={post.thumbnailUrl || ""}
           alt="sampleImage"
           //ここで画像の高さと幅を書かないとエラーがでる。
           width={800}
@@ -62,12 +60,12 @@ const Detail: React.FC = () => {
             {new Date(post.createdAt).toLocaleDateString()}
           </div>
           <ul className="m-0 mb-2.5 flex list-none gap-2.5 p-0">
-            {post.categories.map((category, id) => (
+            {post.postCategories?.map((category, id) => (
               <li
                 className="rounded border border-blue-500 px-2.5 py-[1.25] text-sm text-blue-600"
                 key={id}
               >
-                {category.name}
+                {category.id}
               </li>
             ))}
           </ul>
@@ -80,6 +78,4 @@ const Detail: React.FC = () => {
       </div>
     </Link>
   );
-};
-
-export default Detail;
+}
