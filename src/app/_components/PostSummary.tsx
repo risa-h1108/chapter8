@@ -50,8 +50,8 @@ export const PostSummary: React.FC<Props> = (props) => {
             {new Date(post.createdAt).toLocaleDateString()}
           </p>
           <ul className="m-0 mb-2.5 flex list-none gap-2.5 p-0">
-            {post.categories.map((category, index) => (
-              <li key={index}>{category}</li>
+            {post.postCategories.map((category, index) => (
+              <li key={index}>{category.name}</li> //category全体を渡すのではなく、`category.name`という文字列を渡すことで、Reactが期待する`ReactNode`型に合致する。
             ))}
           </ul>
         </div>

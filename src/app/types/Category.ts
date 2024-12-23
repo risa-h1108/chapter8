@@ -4,6 +4,7 @@
 export interface Category {
   id: number;
   name: string;
+  category: Category;
   createdAt: string;
   updatedAt: string;
 }

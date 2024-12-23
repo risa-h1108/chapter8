@@ -91,7 +91,10 @@ export default function Page() {
           setTitle(post.title);
           setContent(post.content);
           setThumbnailUrl(post.thumbnailUrl);
-          setCategories(post.postCategories);
+
+          // post.postCategories（サーバーからのレスポンス）からCategory[]（フロントエンドの期待の型）への変換
+          const categories = post.postCategories.map((pc) => pc.category);
+          setCategories(categories);
         } else {
           console.error("Post data is missing");
         }
