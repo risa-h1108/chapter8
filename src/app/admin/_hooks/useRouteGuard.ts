@@ -1,10 +1,10 @@
-import { useAuth } from "@/app/_hooks/useAuth";
+import { useSupabaseSession } from "@/app/_hooks/useSupaSession";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 export const useRouteGuard = () => {
   const router = useRouter();
-  const { session } = useAuth();
+  const { session } = useSupabaseSession();
 
   useEffect(() => {
     if (session === undefined) return; // sessionがundefinedの場合は読み込み中なので何もしない

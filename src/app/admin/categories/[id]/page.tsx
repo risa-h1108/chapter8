@@ -5,14 +5,14 @@ import { useEffect, useState } from "react";
 import { Post } from "@/app/types/Post";
 import { useParams, useRouter } from "next/navigation";
 import { CategoryForm } from "@/app/admin/categories/_components/CategoryForm";
-import { useAuth } from "@/app/_hooks/useAuth";
+import { useSupabaseSession } from "@/app/_hooks/useSupaSession";
 
 export default function Page() {
   const [name, setName] = useState("");
   const { id } = useParams();
   const router = useRouter();
 
-  const { token } = useAuth(); // useAuthからトークンを取得
+  const { token } = useSupabaseSession(); // useSupabaseSessionからトークンを取得
 
   //async(e)=>{e()}の形になる。e：の後にどんな情報なのかを示している
   //`e`は、フォームが送信されたときに自動的に渡される情報を保持

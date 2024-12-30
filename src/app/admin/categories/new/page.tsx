@@ -4,12 +4,12 @@ import { useState } from "react";
 import { Post } from "@/app/types/Post";
 import { useRouter } from "next/navigation";
 import { CategoryForm } from "@/app/admin/categories/_components/CategoryForm";
-import { useAuth } from "@/app/_hooks/useAuth";
+import { useSupabaseSession } from "@/app/_hooks/useSupaSession";
 
 export default function Page() {
   const [name, setName] = useState("");
   const router = useRouter();
-  const { token } = useAuth(); // useAuthからトークンを取得
+  const { token } = useSupabaseSession(); // useSupabaseSessionからトークンを取得
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault(); //フォームのデフォルトの動作をなしにする

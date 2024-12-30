@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export default function Page() {
   // 投稿データを「状態」として管理 (初期値はnull)
-  const [posts, setPosts] = useState<Post[] | null>(null);
+  const [posts, setPosts] = useState<Post[]>();
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {

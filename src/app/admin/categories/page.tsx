@@ -6,7 +6,7 @@ import Link from "next/link"; //Next.jsでページ間を移動するときに�
 import { useEffect, useState } from "react"; //useState:ボタンをクリックした回数を数えるような場合(表),useEffect:データの取得や、タイマーの設定など、コンポーネントの表示以外で何かを行うときに使う（裏）
 import { Post } from "@/app/types/Post"; //Postという型（型というのは、データの形を定義）をインポート
 import { Category } from "@/app/types/Category"; //`Category`という型をインポート(データの形を定義)
-import { useAuth } from "@/app/_hooks/useAuth";
+import { useSupabaseSession } from "@/app/_hooks/useSupaSession";
 
 export default function Page() {
   //categories: 現在のカテゴリーのリストを保持するための変数
@@ -14,7 +14,7 @@ export default function Page() {
   //([]): 初期状態として空の配列を設定しています。つまり、最初はカテゴリーが何もない状態
   const [categories, setCategories] = useState<Category[]>([]);
 
-  const { token } = useAuth(); // useAuthからトークンを取得
+  const { token } = useSupabaseSession(); // useSupabaseSessionからトークンを取得
 
   //useEffect:コンポーネントが画面に表示されたときに実行される処理を定義するためのフック
   useEffect(() => {

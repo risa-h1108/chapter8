@@ -7,7 +7,7 @@ import { useParams, useRouter } from "next/navigation";
 import { PostForm } from "@/app/admin/_components/PostForm";
 import { Category } from "@/app/types/Category";
 import { Post } from "@/app/types/Post";
-import { useAuth } from "@/app/_hooks/useAuth";
+import { useSupabaseSession } from "@/app/_hooks/useSupaSession";
 
 export default function Page() {
   //useState(""):初期値を空の文字列に設定
@@ -20,7 +20,7 @@ export default function Page() {
 
   //ページ移動をするための典型文、特定のウェブページの状態管理やルーティングに関連する処理を行うための準備
   const router = useRouter();
-  const { token } = useAuth(); // useAuthからトークンを取得
+  const { token } = useSupabaseSession(); // useSupabaseSessionからトークンを取得
 
   //`React.FormEvent`:TypeScriptを使っている場合に、`e`がReactのフォームイベントであることを型注釈として指定
   const handleSubmit = async (e: React.FormEvent) => {

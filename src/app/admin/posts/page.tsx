@@ -3,11 +3,11 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Post } from "@/app/types/Post";
-import { useAuth } from "@/app/_hooks/useAuth";
+import { useSupabaseSession } from "@/app/_hooks/useSupaSession";
 
 export default function Page() {
   const [posts, setPosts] = useState<Post[]>([]);
-  const { token } = useAuth(); // 👈 useAuthからtokenを取得
+  const { token } = useSupabaseSession(); // 👈 useSupabaseSessionからtokenを取得
 
   useEffect(() => {
     const fetcher = async () => {

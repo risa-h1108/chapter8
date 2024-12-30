@@ -1,41 +1,44 @@
-//Home>Header部分
 "use client";
 
 import Link from "next/link";
+import React from "react";
+import { useSupabaseSession } from "@/app/_hooks/useSupaSession";
 import { supabase } from "@/app/untils/supabase";
-import { useAuth } from "@/app/_hooks/useAuth";
-import { useRouter } from "next/navigation";
 
 export const Header: React.FC = () => {
-  const router = useRouter();
-  const { isLoading, session } = useAuth();
-  const logout = async () => {
+  const handleLogout = async () => {
     await supabase.auth.signOut();
-    router.replace("/");
+    window.location.href = "/";
   };
-  return (
-    <header className="header">
-      <div className="headerLinkWrapper">
-        <Link href="/" className="headerLink">
-          Blog
-        </Link>
-        <div className="authLinks">
-          {!isLoading &&
-            (session ? (
-              <button onClick={logout} className="headerLink">
-                Logout
-              </button>
-            ) : (
-              <Link href="/login" className="headerLink">
-                Login
-              </Link>
-            ))}
-        </div>
 
-        <Link href="/contact" className="headerLink">
-          お問い合わせ
-        </Link>
-      </div>
+  const { session, isLoding } = useSupabaseSession();
+
+  return (
+    <header className="flex items-center justify-between bg-gray-800 p-6 font-bold text-white">
+      <Link href="/" className="headerLink">
+        Blog
+      </Link>
+      {!isLoding && (
+        <div className="flex items-center gap-4">
+          {session ? (
+            <>
+              <Link href="/admin" className="headerLink">
+                管理画面
+              </Link>
+              <button onClick={handleLogout}>ログアウト</button>
+            </>
+          ) : (
+            <>
+              <Link href="/contact" className="headerLink">
+                お問い合わせ
+              </Link>
+              <Link href="/login" className="headerLink">
+                ログイン
+              </Link>
+            </>
+          )}
+        </div>
+      )}
     </header>
   );
 };
