@@ -13,7 +13,7 @@ export default function Page() {
   //useState(""):初期値を空の文字列に設定
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [thumbnailUrl, setThumbnailUrl] = useState("");
+  const [thumbnailImageKey, setThumbnailImageKey] = useState("");
   const [categories, setCategories] = useState<Category[]>([]);
   //URLに含まれる`id`というパラメータを取得
   const { id } = useParams();
@@ -37,7 +37,7 @@ export default function Page() {
           "Content-Type": "application/json",
         },
         //`JSON.stringify`を使ってJavaScriptオブジェクトをJSON文字列に変換
-        body: JSON.stringify({ title, content, thumbnailUrl, categories }),
+        body: JSON.stringify({ title, content, thumbnailImageKey, categories }),
       });
       alert("記事を更新しました。");
     } catch (error) {
@@ -97,7 +97,7 @@ export default function Page() {
 
           setTitle(post.title);
           setContent(post.content);
-          setThumbnailUrl(post.thumbnailUrl);
+          setThumbnailImageKey(post.thumbnailImageKey);
 
           // post.postCategories（サーバーからのレスポンス）からCategory[]（フロントエンドの期待の型）への変換
           const categories = post.postCategories.map((pc) => pc.category);
@@ -131,8 +131,8 @@ export default function Page() {
         setTitle={setTitle}
         content={content}
         setContent={setContent}
-        thumbnailUrl={thumbnailUrl}
-        setThumbnailUrl={setThumbnailUrl}
+        thumbnailImageKey={thumbnailImageKey}
+        setThumbnailImageKey={setThumbnailImageKey}
         categories={categories}
         setCategories={setCategories}
         onSubmit={handleSubmit} //ユーザーがフォームを送信

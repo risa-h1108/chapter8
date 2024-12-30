@@ -49,7 +49,7 @@ export default function Page() {
     <Link href={`/posts/${post.id}`}>
       <div className="mx-auto my-0 w-96 max-w-3xl">
         <Image
-          src={post.thumbnailUrl || ""}
+          src={post.thumbnailImageKey || ""}
           alt="sampleImage"
           //ここで画像の高さと幅を書かないとエラーがでる。
           width={800}

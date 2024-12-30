@@ -3,7 +3,7 @@ export const dummyPosts = [
   {
     id: 1,
     title: "記事タイトル１",
-    thumbnailUrl: "https://placehold.jp/800x400.png",
+    thumbnailImageKey: "https://placehold.jp/800x400.png",
     createdAt: "2023-09-11T09:00:00.000Z",
     categories: ["React", "TypeScript"],
     content: `
@@ -12,7 +12,7 @@ export const dummyPosts = [
   {
     id: 2,
     title: "記事タイトル２",
-    thumbnailUrl: "https://placehold.jp/800x400.png",
+    thumbnailImageKey: "https://placehold.jp/800x400.png",
     createdAt: "2023-09-10T09:00:00.000Z",
     categories: ["HTML", "CSS"],
     content: `
@@ -21,7 +21,7 @@ export const dummyPosts = [
   {
     id: 3,
     title: "記事タイトル３",
-    thumbnailUrl: "https://placehold.jp/800x400.png",
+    thumbnailImageKey: "https://placehold.jp/800x400.png",
     createdAt: "2023-09-09T09:00:00.000Z",
     categories: ["JavaScript"],
     content: `

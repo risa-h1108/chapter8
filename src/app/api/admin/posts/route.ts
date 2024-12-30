@@ -49,7 +49,7 @@ interface CreatePostRequestBody {
   title: string;
   content: string;
   categories: { id: number }[];
-  thumbnailUrl: string;
+  thumbnailImageKey: string;
 }
 
 // POSTという命名にすることで、POSTリクエストの時にこの関数が呼ばれる
@@ -58,9 +58,13 @@ export const POST = async (request: Request, context: any) => {
     // リクエストのbodyを取得
     const body = await request.json();
 
-    // bodyの中からtitle, content, categories, thumbnailUrlを取り出す
-    const { title, content, categories, thumbnailUrl }: CreatePostRequestBody =
-      body;
+    // bodyの中からtitle, content, categories, thumbnailImageKeyを取り出す
+    const {
+      title,
+      content,
+      categories,
+      thumbnailImageKey,
+    }: CreatePostRequestBody = body;
 
     // 投稿をDBに生成
     //prisma.post.create を使って、新しい投稿をデータベースに作成
@@ -68,7 +72,7 @@ export const POST = async (request: Request, context: any) => {
       data: {
         title,
         content,
-        thumbnailUrl,
+        thumbnailImageKey,
       },
     });
 

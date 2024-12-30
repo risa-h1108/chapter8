@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Category, PrismaClient } from "@prisma/client";
+import { Post } from "@/app/types/Post";
 
 const prisma = new PrismaClient();
 
@@ -40,7 +41,7 @@ interface UpdatePostRequestBody {
   title: string;
   content: string;
   categories: { id: number }[];
-  thumbnailUrl: string;
+  thumbnailImageKey: string;
 }
 
 // PUTという命名にすることで、PUTリクエストの時にこの関数が呼ばれる
@@ -52,8 +53,12 @@ export const PUT = async (
   const { id } = params;
 
   // リクエストのbodyを取得
-  const { title, content, categories, thumbnailUrl }: UpdatePostRequestBody =
-    await request.json();
+  const {
+    title,
+    content,
+    categories,
+    thumbnailImageKey,
+  }: UpdatePostRequestBody = await request.json();
   console.log(categories);
 
   try {
@@ -65,7 +70,7 @@ export const PUT = async (
       data: {
         title,
         content,
-        thumbnailUrl,
+        thumbnailImageKey,
       },
     });
 

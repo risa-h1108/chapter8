@@ -1,41 +1,28 @@
 "use client";
 
-import { supabase } from "@/app/untils/supabase";
-import { useRouter } from "next/navigation";
+import { supabase } from "@/app/untils/supabase"; // 前の工程で作成したファイル
 import { useState } from "react";
 
 export default function Page() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const router = useRouter();
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    try {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-
-      // Supabaseのレスポンスをログに出力
-      console.log("Supabase response data:", data);
-      console.log("Supabase response error:", error);
-
-      if (error) {
-        alert("ログインに失敗しました");
-      } else {
-        router.replace("/admin/");
-      }
-      if (!error) {
-        console.log("Navigating to /admin");
-        router.replace("/admin/");
-      }
-    } catch (error) {
-      console.error("予期しないエラーが発生しました:", error);
-      alert(
-        "ログイン処理中に予期しないエラーが発生しました。もう一度お試しください。"
-      );
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        emailRedirectTo: `http://localhost:3000/login`,
+      },
+    });
+    if (error) {
+      alert("登録に失敗しました");
+    } else {
+      setEmail("");
+      setPassword("");
+      alert("確認メールを送信しました。");
     }
   };
 
@@ -57,6 +44,7 @@ export default function Page() {
             placeholder="name@company.com"
             required
             onChange={(e) => setEmail(e.target.value)}
+            value={email}
           />
         </div>
         <div>
@@ -74,6 +62,7 @@ export default function Page() {
             className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
             required
             onChange={(e) => setPassword(e.target.value)}
+            value={password}
           />
         </div>
 
@@ -82,7 +71,7 @@ export default function Page() {
             type="submit"
             className="w-full rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300"
           >
-            ログイン
+            登録
           </button>
         </div>
       </form>

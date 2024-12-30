@@ -11,11 +11,13 @@ export const GET = async (request: NextRequest) => {
   const token = request.headers.get("Authorization") ?? "";
 
   // supabaseに対してtokenを送る
-  const { error } = await supabase.auth.getUser(token);
+  const { data, error } = await supabase.auth.getUser(token);
 
   // 送ったtokenが正しくない場合、errorが返却されるので、クライアントにもエラーを返す
   if (error)
     return NextResponse.json({ status: error.message }, { status: 400 });
+
+  console.log(data);
 
   // tokenが正しい場合、以降が実行される
   //try...(実施/取得内容)catch...（エラー内容）

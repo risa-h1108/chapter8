@@ -19,7 +19,8 @@ const main = async () => {
     data: {
       title: "投稿1",
       content: "投稿1の本文。<br/>投稿1の本文。投稿1の本文。",
-      thumbnailUrl: "https://w1980.blob.core.windows.net/pg3/cover-img-red.jpg",
+      thumbnailImageKey:
+        "https://w1980.blob.core.windows.net/pg3/cover-img-red.jpg",
       postCategories: {
         create: [{ categoryId: category1.id }, { categoryId: category2.id }], // ◀◀ 注目
       },
@@ -30,7 +31,7 @@ const main = async () => {
     data: {
       title: "投稿2",
       content: "投稿2の本文。<br/>投稿2の本文。投稿2の本文。",
-      thumbnailUrl:
+      thumbnailImageKey:
         "https://w1980.blob.core.windows.net/pg3/cover-img-green.jpg",
       postCategories: {
         create: [{ categoryId: category2.id }, { categoryId: category3.id }], // ◀◀ 注目

@@ -10,12 +10,11 @@ export default function Page() {
 
   useEffect(() => {
     const fetcher = async () => {
-      const res = await fetch(`/api/posts`);
+      const res = await fetch("/api/posts");
 
-      const data = await res.json();
-      console.log(data);
+      const { posts } = await res.json();
 
-      setPosts(data.posts);
+      setPosts(posts);
       setLoading(false);
     };
     console.log(posts);
