@@ -5,11 +5,14 @@ import { useEffect, useState } from "react";
 import { Post } from "@/app/types/Post";
 import { useParams, useRouter } from "next/navigation";
 import { CategoryForm } from "@/app/admin/categories/_components/CategoryForm";
+import { useAuth } from "@/app/_hooks/useAuth";
 
 export default function Page() {
   const [name, setName] = useState("");
   const { id } = useParams();
   const router = useRouter();
+
+  const { token } = useAuth(); // useAuthからトークンを取得
 
   //async(e)=>{e()}の形になる。e：の後にどんな情報なのかを示している
   //`e`は、フォームが送信されたときに自動的に渡される情報を保持
@@ -22,6 +25,7 @@ export default function Page() {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
+          Authorization: token || "",
         },
         body: JSON.stringify({ name }), //カテゴリー名を表示
       });

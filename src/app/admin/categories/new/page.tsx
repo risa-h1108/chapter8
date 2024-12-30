@@ -4,10 +4,12 @@ import { useState } from "react";
 import { Post } from "@/app/types/Post";
 import { useRouter } from "next/navigation";
 import { CategoryForm } from "@/app/admin/categories/_components/CategoryForm";
+import { useAuth } from "@/app/_hooks/useAuth";
 
 export default function Page() {
   const [name, setName] = useState("");
   const router = useRouter();
+  const { token } = useAuth(); // useAuthからトークンを取得
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault(); //フォームのデフォルトの動作をなしにする
@@ -19,10 +21,12 @@ export default function Page() {
           method: "POST", //「新しいものを作りたいよ」という意味
           headers: {
             "Content-Type": "application/json",
+            Authorization: token || "",
           },
           body: JSON.stringify({ name }), //送るデータの中身
         }
       );
+
       if (!res.ok) {
         throw new Error("Failed to create category");
       }

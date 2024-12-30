@@ -6,6 +6,7 @@ import Link from "next/link"; //Next.jsでページ間を移動するときに�
 import { useEffect, useState } from "react"; //useState:ボタンをクリックした回数を数えるような場合(表),useEffect:データの取得や、タイマーの設定など、コンポーネントの表示以外で何かを行うときに使う（裏）
 import { Post } from "@/app/types/Post"; //Postという型（型というのは、データの形を定義）をインポート
 import { Category } from "@/app/types/Category"; //`Category`という型をインポート(データの形を定義)
+import { useAuth } from "@/app/_hooks/useAuth";
 
 export default function Page() {
   //categories: 現在のカテゴリーのリストを保持するための変数
@@ -13,11 +14,21 @@ export default function Page() {
   //([]): 初期状態として空の配列を設定しています。つまり、最初はカテゴリーが何もない状態
   const [categories, setCategories] = useState<Category[]>([]);
 
+  const { token } = useAuth(); // useAuthからトークンを取得
+
   //useEffect:コンポーネントが画面に表示されたときに実行される処理を定義するためのフック
   useEffect(() => {
+    if (!token) return;
     const fetcher = async () => {
-      const res = await fetch("/api/admin/categories"); //`/api/admin/categories`というURLからカテゴリーのデータを取得しています。
-      //JSONから受け取ったデータの中から`categories`というプロパティを取り出しています。
+      //`/api/admin/categories`というURLからカテゴリーのデータを取得しています。
+      const res = await fetch("/api/admin/categories", {
+        headers: {
+          //JSONから受け取ったデータの中から`categories`というプロパティを取り出しています。
+          "Content-Type": "application/json",
+          Authorization: token,
+        },
+      });
+
       const { categories } = await res.json(); //`fetch`関数を使って取得したレスポンス（`res`）をJSON形式に変換
       //`useState`フックで定義した`setCategories`関数を使って、取得した`categories`のデータをセットしています。
       // categories`という状態が更新され、ページが再レンダリングされることで、最新のカテゴリー情報が画面に表示されます。
@@ -25,7 +36,7 @@ export default function Page() {
     };
 
     fetcher(); //先ほど定義した`fetcher`という非同期関数を呼び出しています。これにより、実際にデータの取得と状態の更新が行われます。
-  }, []); //空の配列を渡すことで、この`useEffect`はコンポーネントの最初のレンダリング時に一度だけ実行される
+  }, [token]); //空の配列を渡すことで、この`useEffect`はコンポーネントの最初のレンダリング時に一度だけ実行される
 
   //カテゴリーの一覧を表示するためのページを作成しています。
   // ユーザーはカテゴリーの名前をクリックして、その詳細ページに移動することができます。

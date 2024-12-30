@@ -3,18 +3,26 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Post } from "@/app/types/Post";
+import { useAuth } from "@/app/_hooks/useAuth";
 
 export default function Page() {
   const [posts, setPosts] = useState<Post[]>([]);
+  const { token } = useAuth(); // 👈 useAuthからtokenを取得
 
   useEffect(() => {
     const fetcher = async () => {
-      const res = await fetch("/api/admin/posts");
+      if (!token) return; //tokenがない場合は何もしない
+      const res = await fetch("/api/admin/posts", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token, // 👈 Header に token を付与
+        },
+      });
       const { posts } = await res.json();
-      setPosts(posts);
+      setPosts([...posts]);
     };
     fetcher();
-  }, []);
+  }, [token]);
 
   return (
     <div>
@@ -32,7 +40,7 @@ export default function Page() {
       </div>
 
       <div>
-        {posts.map((post) => {
+        {posts?.map((post) => {
           return (
             <Link href={`/admin/posts/${post.id}`} key={post.id}>
               {/* 記事のボックスです。「border-b」は下に線を引き、「border-gray-300」はその線を灰色にします。「p-4」は内側に余白を作り、

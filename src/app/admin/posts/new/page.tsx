@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation"; //Next.jsの機能のひとつで、ページ間の移動をプログラムで制御するために使う
 import { PostForm } from "@/app/admin/_components/PostForm"; //`PostForm`という名前のコンポーネントを持ってくるため
 import { Category } from "@/app/types/Category"; //Category`という名前の型（TypeScriptの型）を持ってくるため
+import { useAuth } from "@/app/_hooks/useAuth";
 
 export default function Page() {
   const [title, setTitle] = useState(""); //`title`という状態（変数）と、その状態を更新するための関数`setTitle`を定義.("")は初期値で、ここでは空の文字列を設定
@@ -16,6 +17,7 @@ export default function Page() {
   const [categories, setCategories] = useState<Category[]>([]);
 
   const router = useRouter(); //`router`を使うことでボタンをクリックしたときに別のページに移動する、といった操作ができる
+  const { token } = useAuth(); // useAuthからトークンを取得
 
   //e:フォームが送信されるときに発生するイベントの情報
   //`React.FormEvent`は、このイベントがフォームに関するものであることを示している
@@ -31,6 +33,7 @@ export default function Page() {
         //headers:リクエストに関する追加情報を指定するため
         headers: {
           "Content-Type": "application/json", //送信するデータがJSON形式であることを示す
+          Authorization: token || "", // 👈 Header に token を付与,tokenがnullの場合は空文字列を使う
         },
         //body:サーバーに送信するデータの内容
         //JSON.stringify:JavaScriptのオブジェクトをJSON形式の文字列に変換する関数
