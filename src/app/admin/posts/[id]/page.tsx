@@ -7,7 +7,7 @@ import { useParams, useRouter } from "next/navigation";
 import { PostForm } from "@/app/admin/_components/PostForm";
 import { Category } from "@/app/types/Category";
 import { Post } from "@/app/types/Post";
-import { useSupabaseSession } from "@/app/_hooks/useSupaSession";
+import { useSupabaseSession } from "@/app/_hooks/useSupabaseSession";
 
 export default function Page() {
   //useState(""):初期値を空の文字列に設定

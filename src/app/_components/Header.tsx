@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import React from "react";
-import { useSupabaseSession } from "@/app/_hooks/useSupaSession";
+import { useSupabaseSession } from "@/app/_hooks/useSupabaseSession";
 import { supabase } from "@/app/untils/supabase";
 
 export const Header: React.FC = () => {
@@ -11,14 +11,14 @@ export const Header: React.FC = () => {
     window.location.href = "/";
   };
 
-  const { session, isLoding } = useSupabaseSession();
+  const { session, isLoading } = useSupabaseSession();
 
   return (
     <header className="flex items-center justify-between bg-gray-800 p-6 font-bold text-white">
       <Link href="/" className="headerLink">
         Blog
       </Link>
-      {!isLoding && (
+      {!isLoading && (
         <div className="flex items-center gap-4">
           {session ? (
             <>

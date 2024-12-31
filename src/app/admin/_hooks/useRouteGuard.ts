@@ -1,4 +1,4 @@
-import { useSupabaseSession } from "@/app/_hooks/useSupaSession";
+import { useSupabaseSession } from "@/app/_hooks/useSupabaseSession";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 

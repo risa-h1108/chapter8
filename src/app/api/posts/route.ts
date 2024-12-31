@@ -5,19 +5,9 @@ import { supabase } from "@/app/untils/supabase";
 //prisma という名前でPrismaクライアントを作成。このクライアントを使ってデータベース操作を行うことができる
 //Prismaクライアント:PrismaというORM（オブジェクトリレーショナルマッピング）ツールを使ってデータベースにアクセスするためのクライアント
 const prisma = new PrismaClient();
-
+// console.log(prisma);
 // GETという命名にすることで、GETリクエストの時にこの関数が呼ばれる
 export const GET = async (request: NextRequest) => {
-  const token = request.headers.get("Authorization") ?? "";
-
-  // supabaseに対してtokenを送る
-  const { error } = await supabase.auth.getUser(token);
-
-  // 送ったtokenが正しくない場合、errorが返却されるので、クライアントにもエラーを返す
-  if (error)
-    return NextResponse.json({ status: error.message }, { status: 400 });
-
-  // tokenが正しい場合、以降が実行される
   //try...(実施/取得内容)catch...（エラー内容）
   try {
     // Postの一覧をDBから取得

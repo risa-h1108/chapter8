@@ -6,7 +6,7 @@ import Link from "next/link"; //Next.jsでページ間を移動するときに�
 import { useEffect, useState } from "react"; //useState:ボタンをクリックした回数を数えるような場合(表),useEffect:データの取得や、タイマーの設定など、コンポーネントの表示以外で何かを行うときに使う（裏）
 import { Post } from "@/app/types/Post"; //Postという型（型というのは、データの形を定義）をインポート
 import { Category } from "@/app/types/Category"; //`Category`という型をインポート(データの形を定義)
-import { useSupabaseSession } from "@/app/_hooks/useSupaSession";
+import { useSupabaseSession } from "@/app/_hooks/useSupabaseSession";
 
 export default function Page() {
   //categories: 現在のカテゴリーのリストを保持するための変数

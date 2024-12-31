@@ -4,14 +4,12 @@ import { useState } from "react";
 import { useRouter } from "next/navigation"; //Next.jsの機能のひとつで、ページ間の移動をプログラムで制御するために使う
 import { PostForm } from "@/app/admin/_components/PostForm"; //`PostForm`という名前のコンポーネントを持ってくるため
 import { Category } from "@/app/types/Category"; //Category`という名前の型（TypeScriptの型）を持ってくるため
-import { useSupabaseSession } from "@/app/_hooks/useSupaSession";
+import { useSupabaseSession } from "@/app/_hooks/useSupabaseSession";
 
 export default function Page() {
   const [title, setTitle] = useState(""); //`title`という状態（変数）と、その状態を更新するための関数`setTitle`を定義.("")は初期値で、ここでは空の文字列を設定
   const [content, setContent] = useState(""); //ブログの本文などを管理するため
-  const [thumbnailImageKey, setThumbnailImageKey] = useState(
-    "https://placehold.jp/800x400.png"
-  ); //サムネイル画像のURLを管理するための状態.初期値として、`https://placehold.jp/800x400.png`というダミーの画像URLが設定
+  const [thumbnailImageKey, setThumbnailImageKey] = useState(""); //サムネイル画像のURLを管理するための状態.初期値として、`https://placehold.jp/800x400.png`というダミーの画像URLが設定
   //カテゴリー情報を管理するための状態.Category[]は「カテゴリーの配列」という型を示しており、初期値は空の配列`[]`です。
   // これにより、複数のカテゴリーを管理できるようになる
   const [categories, setCategories] = useState<Category[]>([]);

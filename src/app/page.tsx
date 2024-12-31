@@ -2,19 +2,20 @@
 import { useState, useEffect } from "react";
 import type { Post } from "@/app/types/Post";
 import Link from "next/link";
+import { supabase } from "./untils/supabase";
 
 export default function Page() {
   // 投稿データを「状態」として管理 (初期値はnull)
-  const [posts, setPosts] = useState<Post[]>();
+  const [posts, setPosts] = useState<Post[] | null>(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetcher = async () => {
       const res = await fetch("/api/posts");
+      const data = await res.json();
+      console.log(data);
 
-      const { posts } = await res.json();
-
-      setPosts(posts);
+      setPosts(data.posts);
       setLoading(false);
     };
     console.log(posts);

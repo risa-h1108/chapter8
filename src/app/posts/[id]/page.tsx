@@ -8,6 +8,7 @@ import { useParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { supabase } from "@/app/untils/supabase";
 
 export default function Page() {
   const { id } = useParams();
@@ -35,6 +36,23 @@ export default function Page() {
   }, [id]);
 
   console.log(id); // ここでIDを確認
+
+  // DBに保存しているthumbnailImageKeyを元に、Supabaseから画像のURLを取得する
+  useEffect(() => {
+    if (!post?.thumbnailImageKey) return;
+
+    const fetcher = async () => {
+      const {
+        data: { publicUrl },
+      } = await supabase.storage
+        .from("post_thumbnail")
+        .getPublicUrl(post.thumbnailImageKey);
+
+      setThumbnailImageUrl(publicUrl);
+    };
+
+    fetcher();
+  }, [post?.thumbnailImageKey]);
 
   if (loading)
     return (
@@ -78,4 +96,7 @@ export default function Page() {
       </div>
     </Link>
   );
+}
+function setThumbnailImageUrl(publicUrl: string) {
+  throw new Error("Function not implemented.");
 }
