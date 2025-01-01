@@ -13,7 +13,7 @@ const calculateMD5Hash = async (file: File): Promise<string> => {
 };
 
 const Page: React.FC = () => {
-  const bucketName = "post_thumbnail2";
+  const bucketName = "post_thumbnail";
   const [coverImageUrl, setCoverImageUrl] = useState<string | undefined>();
   const [coverImageKey, setCoverImageKey] = useState<string | undefined>();
   const { session } = useSupabaseSession();

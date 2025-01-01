@@ -26,13 +26,14 @@ export default function Page() {
   const handleSubmit = async (e: React.FormEvent) => {
     // フォームのデフォルトの動作をキャンセルします。
     e.preventDefault();
+    if (!token) return;
     try {
       // 記事を作成します。
       await fetch(`/api/admin/posts/${id}`, {
         //記事の情報を更新するために`PUT`を使用
         method: "PUT",
         headers: {
-          Authorization: token || "", //tokenがnullの場合は空文字列を使う
+          Authorization: token, //tokenがnullの場合は空文字列を使う
           //送信するデータ(Content-Type コンテンツタイプ)がJSON形式であることを示す
           "Content-Type": "application/json",
         },
@@ -83,8 +84,16 @@ export default function Page() {
   // これにより、ユーザーがページを開いたときに最新の情報が表示されます。
   useEffect(() => {
     const fetcher = async () => {
+      if (!token) return;
       try {
-        const res = await fetch(`/api/admin/posts/${id}`);
+        const res = await fetch(`/api/admin/posts/${id}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token,
+          },
+        });
+
         if (!res.ok) {
           throw new Error("Failed to fetch data");
         }
@@ -112,7 +121,7 @@ export default function Page() {
     };
 
     fetcher();
-  }, [id]);
+  }, [id, token]);
 
   return (
     //mx-auto:横方向の中央揃え

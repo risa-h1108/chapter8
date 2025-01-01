@@ -50,7 +50,7 @@ export default function Page() {
       const {
         data: { publicUrl },
       } = await supabase.storage
-        .from("post_thumbnail2")
+        .from("post_thumbnail")
         .getPublicUrl(post.thumbnailImageKey);
 
       console.log("Generated Public URL:", publicUrl); // 生成されたURLを確認
@@ -104,7 +104,4 @@ export default function Page() {
       </div>
     </Link>
   );
-}
-function setThumbnailImageUrl(publicUrl: string) {
-  throw new Error("Function not implemented.");
 }
