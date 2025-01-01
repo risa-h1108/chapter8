@@ -64,15 +64,21 @@ export default function Page() {
 
   //`id`が変わるたびにデータを取得するように設定
   useEffect(() => {
+    if (!token) return;
     const fetcher = async () => {
-      const res = await fetch(`/api/admin/categories/${id}`);
+      const res = await fetch(`/api/admin/categories/${id}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token,
+        },
+      });
       const { category } = await res.json();
       // 取得したカテゴリーの名前(category.name)を`setName`関数で状態に保存
       setName(category.name);
     };
 
     fetcher();
-  }, [id]);
+  }, [id, token]);
 
   return (
     <div className="container mx-auto px-4">

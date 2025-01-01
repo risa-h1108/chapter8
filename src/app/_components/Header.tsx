@@ -4,11 +4,14 @@ import Link from "next/link";
 import React from "react";
 import { useSupabaseSession } from "@/app/_hooks/useSupabaseSession";
 import { supabase } from "@/app/untils/supabase";
+import { useRouter } from "next/navigation";
 
 export const Header: React.FC = () => {
+  const router = useRouter();
+
   const handleLogout = async () => {
     await supabase.auth.signOut();
-    window.location.href = "/";
+    router.push("/"); // ログアウト後にホームページにリダイレクト
   };
 
   const { session, isLoading } = useSupabaseSession();

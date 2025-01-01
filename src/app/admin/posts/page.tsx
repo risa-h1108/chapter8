@@ -7,22 +7,43 @@ import { useSupabaseSession } from "@/app/_hooks/useSupabaseSession";
 
 export default function Page() {
   const [posts, setPosts] = useState<Post[]>([]);
+  const [loading, setLoading] = useState(true);
   const { token } = useSupabaseSession(); // 👈 useSupabaseSessionからtokenを取得
 
   useEffect(() => {
     const fetcher = async () => {
       if (!token) return; //tokenがない場合は何もしない
+      setLoading(true); // 読み込み開始時にローディング状態をtrueに設定
+
       const res = await fetch("/api/admin/posts", {
         headers: {
           "Content-Type": "application/json",
           Authorization: token, // 👈 Header に token を付与
         },
       });
+
+      //APIリクエストの結果をチェックし、リクエストが成功したかどうかを確認する
+      if (!res.ok) {
+        console.error("Failed to fetch posts");
+        setLoading(false); //ローディング状態を解除するために使用（ユーザーに対して読み込み中の表示を終了し、適切なエラーメッセージを表示するため）
+        return;
+      }
+
       const { posts } = await res.json();
       setPosts([...posts]);
+      setLoading(false); // 読み込み完了時にローディング状態をfalseに設定
     };
     fetcher();
   }, [token]);
+
+  if (loading)
+    return (
+      <div className="m-5 mx-auto text-center text-sm font-bold">
+        読み込み中...
+      </div>
+    ); // 読み込み中の表示
+
+  if (!posts) return <div className="text-gray-500">まだ記事がありません</div>; // 記事がない場合の表示
 
   return (
     <div>
@@ -40,7 +61,7 @@ export default function Page() {
       </div>
 
       <div>
-        {posts?.map((post) => {
+        {posts.map((post) => {
           return (
             <Link href={`/admin/posts/${post.id}`} key={post.id}>
               {/* 記事のボックスです。「border-b」は下に線を引き、「border-gray-300」はその線を灰色にします。「p-4」は内側に余白を作り、

@@ -5,13 +5,19 @@ const nextConfig = {
       {
         protocol: "https",
         hostname: "w1980.blob.core.windows.net",
+        pathname: "/pg3/**",
       },
-      { protocol: "https", hostname: "placehold.jp" },
-      { protocol: "https", hostname: "images.microcms-assets.io" }, //画面を読み込むのを許可するnext.jsの仕様
-
       {
         protocol: "https",
-        hostname: "**.supabase.co",
+        hostname: "placehold.jp",
+      },
+      {
+        protocol: "https",
+        hostname: "images.microcms-assets.io",
+      },
+      {
+        protocol: "https",
+        hostname: "pudpdsuupbyrgglqqrfb.supabase.co",
         pathname: "/storage/v1/object/public/**",
       },
     ],

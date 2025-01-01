@@ -16,6 +16,9 @@ export default function Page() {
 
   const [post, setPost] = useState<Post | null>(null);
   const [loading, setLoading] = useState(false);
+  const [thumbnailImageUrl, setThumbnailImageUrl] = useState<string | null>(
+    null
+  ); // 画像URLを管理する状態を追加
 
   // APIでpostsを取得する処理をuseEffectで実行します。
   useEffect(() => {
@@ -39,20 +42,23 @@ export default function Page() {
 
   // DBに保存しているthumbnailImageKeyを元に、Supabaseから画像のURLを取得する
   useEffect(() => {
-    if (!post?.thumbnailImageKey) return;
+    if (!post || !post?.thumbnailImageKey) return;
+
+    console.log("thumbnailImageKey:", post.thumbnailImageKey); // ここで値を確認
 
     const fetcher = async () => {
       const {
         data: { publicUrl },
       } = await supabase.storage
-        .from("post_thumbnail")
+        .from("post_thumbnail2")
         .getPublicUrl(post.thumbnailImageKey);
 
+      console.log("Generated Public URL:", publicUrl); // 生成されたURLを確認
       setThumbnailImageUrl(publicUrl);
     };
 
     fetcher();
-  }, [post?.thumbnailImageKey]);
+  }, [post]);
 
   if (loading)
     return (
@@ -66,13 +72,15 @@ export default function Page() {
   return (
     <Link href={`/posts/${post.id}`}>
       <div className="mx-auto my-0 w-96 max-w-3xl">
-        <Image
-          src={post.thumbnailImageKey || ""}
-          alt="sampleImage"
-          //ここで画像の高さと幅を書かないとエラーがでる。
-          width={800}
-          height={400}
-        />
+        {thumbnailImageUrl && (
+          <Image
+            src={thumbnailImageUrl} // 取得したURLを使用
+            alt="sampleImage"
+            //ここで画像の高さと幅を書かないとエラーがでる。
+            width={800}
+            height={400}
+          />
+        )}
         <div className="mb-[10px] flex items-center justify-between">
           <div className="mr-1 text-sm text-[#888888]">
             {new Date(post.createdAt).toLocaleDateString()}
