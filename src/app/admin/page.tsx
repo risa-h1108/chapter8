@@ -1,10 +1,5 @@
-// import { redirect } from "next/navigation";
-
-// export default function Page() {
-//   redirect(`/admin/posts`);
-// }
-
 "use client";
+
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";

@@ -7,7 +7,6 @@ import { useParams } from "next/navigation";
 //Imageは、Next.jsが提供する画像表示用のコンポーネントです。パフォーマンスを最適化し、レスポンシブな画像を簡単に実装できます。
 import Image from "next/image";
 import Link from "next/link";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { supabase } from "@/app/untils/supabase";
 
 export default function Page() {

@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { Category, PrismaClient } from "@prisma/client";
-import { Post } from "@/app/types/Post";
+import { PrismaClient } from "@prisma/client";
 import { supabase } from "@/app/untils/supabase";
 
 const prisma = new PrismaClient();

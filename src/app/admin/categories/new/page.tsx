@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { Post } from "@/app/types/Post";
 import { useRouter } from "next/navigation";
 import { CategoryForm } from "@/app/admin/categories/_components/CategoryForm";
 import { useSupabaseSession } from "@/app/_hooks/useSupabaseSession";

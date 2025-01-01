@@ -1,7 +1,6 @@
 //ファイルの大文字か小文字かはしっかり区別する。パスの代わりになるから違いは大事
 
 "use client";
-import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 interface FormValues {

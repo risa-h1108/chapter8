@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
-import { supabase } from "@/app/untils/supabase";
 
 //prisma という名前でPrismaクライアントを作成。このクライアントを使ってデータベース操作を行うことができる
 //Prismaクライアント:PrismaというORM（オブジェクトリレーショナルマッピング）ツールを使ってデータベースにアクセスするためのクライアント

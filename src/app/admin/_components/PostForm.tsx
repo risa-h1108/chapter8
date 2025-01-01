@@ -85,6 +85,27 @@ export const PostForm: React.FC<Props> = ({
     fetcher();
   }, [thumbnailImageKey]);
 
+  async function handleImageDelete(
+    event: React.MouseEvent<HTMLButtonElement>
+  ): Promise<void> {
+    if (!thumbnailImageKey) return; // 画像が設定されていない場合は何もしない
+
+    // Supabaseから画像を削除
+    const { error } = await supabase.storage
+      .from("post_thumbnail")
+      .remove([thumbnailImageKey]);
+
+    // エラーが発生した場合はアラートを表示
+    if (error) {
+      alert(error.message);
+      return;
+    }
+
+    // 状態をリセット
+    setThumbnailImageKey("");
+    setThumbnailImageUrl(null);
+  }
+
   return (
     <form onSubmit={onSubmit} className="space-y-4">
       <div>
@@ -136,6 +157,13 @@ export const PostForm: React.FC<Props> = ({
               width={400}
               height={400}
             />
+            <button
+              type="button"
+              className="mt-2 rounded-md border border-transparent bg-red-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+              onClick={handleImageDelete}
+            >
+              画像を削除
+            </button>
           </div>
         )}
       </div>
