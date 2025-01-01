@@ -4,18 +4,18 @@ import { useState } from "react";
 import { useRouter } from "next/navigation"; //Next.jsの機能のひとつで、ページ間の移動をプログラムで制御するために使う
 import { PostForm } from "@/app/admin/_components/PostForm"; //`PostForm`という名前のコンポーネントを持ってくるため
 import { Category } from "@/app/types/Category"; //Category`という名前の型（TypeScriptの型）を持ってくるため
+import { useSupabaseSession } from "@/app/_hooks/useSupabaseSession";
 
 export default function Page() {
   const [title, setTitle] = useState(""); //`title`という状態（変数）と、その状態を更新するための関数`setTitle`を定義.("")は初期値で、ここでは空の文字列を設定
   const [content, setContent] = useState(""); //ブログの本文などを管理するため
-  const [thumbnailUrl, setThumbnailUrl] = useState(
-    "https://placehold.jp/800x400.png"
-  ); //サムネイル画像のURLを管理するための状態.初期値として、`https://placehold.jp/800x400.png`というダミーの画像URLが設定
+  const [thumbnailImageKey, setThumbnailImageKey] = useState(""); //サムネイル画像のURLを管理するための状態.初期値として、`https://placehold.jp/800x400.png`というダミーの画像URLが設定
   //カテゴリー情報を管理するための状態.Category[]は「カテゴリーの配列」という型を示しており、初期値は空の配列`[]`です。
   // これにより、複数のカテゴリーを管理できるようになる
   const [categories, setCategories] = useState<Category[]>([]);
 
   const router = useRouter(); //`router`を使うことでボタンをクリックしたときに別のページに移動する、といった操作ができる
+  const { token } = useSupabaseSession(); // useSupabaseSessionからトークンを取得
 
   //e:フォームが送信されるときに発生するイベントの情報
   //`React.FormEvent`は、このイベントがフォームに関するものであることを示している
@@ -31,10 +31,11 @@ export default function Page() {
         //headers:リクエストに関する追加情報を指定するため
         headers: {
           "Content-Type": "application/json", //送信するデータがJSON形式であることを示す
+          Authorization: token || "", // 👈 Header に token を付与,tokenがnullの場合は空文字列を使う
         },
         //body:サーバーに送信するデータの内容
         //JSON.stringify:JavaScriptのオブジェクトをJSON形式の文字列に変換する関数
-        body: JSON.stringify({ title, content, thumbnailUrl, categories }), //`title`（タイトル）、`content`（内容）、`thumbnailUrl`（サムネイルのURL）、`categories`（カテゴリー）を含むオブジェクトをJSON形式に変換して送信
+        body: JSON.stringify({ title, content, thumbnailImageKey, categories }), //`title`（タイトル）、`content`（内容）、`thumbnailUrl`（サムネイルのURL）、`categories`（カテゴリー）を含むオブジェクトをJSON形式に変換して送信
       });
 
       // レスポンスから作成した記事のIDを取得します。
@@ -74,8 +75,8 @@ export default function Page() {
         setTitle={setTitle} //`setTitleという状態を`PostForm`のコンポーネントに渡しています
         content={content}
         setContent={setContent}
-        thumbnailUrl={thumbnailUrl}
-        setThumbnailUrl={setThumbnailUrl}
+        thumbnailImageKey={thumbnailImageKey}
+        setThumbnailImageKey={setThumbnailImageKey}
         categories={categories}
         setCategories={setCategories}
         //onSubmit={handleSubmit}：フォームが送信されたときに実行する関数を指定しています。`

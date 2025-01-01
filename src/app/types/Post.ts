@@ -4,7 +4,7 @@ import { PostCategory } from "./PostCategory";
 export type Post = {
   id: number;
   title: string;
-  thumbnailUrl: string;
+  thumbnailImageKey: string;
   createdAt: string;
   postCategories: PostCategory[];
   content: string;

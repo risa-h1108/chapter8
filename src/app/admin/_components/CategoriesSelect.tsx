@@ -7,6 +7,7 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import Chip from "@mui/material/Chip";
 import { Category } from "@/app/types/Category";
 import { useEffect } from "react";
+import { useSupabaseSession } from "@/app/_hooks/useSupabaseSession";
 
 interface Props {
   //selectedCategories: Category 型の配列,現在どのカテゴリーが選ばれているかを示す
@@ -25,15 +26,30 @@ export const CategoriesSelect: React.FC<Props> = ({
 }) => {
   //React.useState<Category[]>([]): 初期値は空の配列で、カテゴリーのデータは後でサーバーから取得
   const [categories, setCategories] = React.useState<Category[]>([]);
+  const { token } = useSupabaseSession(); // useSupabaseSessionからトークンを取得
 
   useEffect(() => {
     const fetcher = async () => {
-      const res = await fetch("/api/admin/categories");
-      const { categories } = await res.json();
-      setCategories(categories);
+      if (!token) return;
+      try {
+        const res = await fetch("/api/admin/categories", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token,
+          },
+        });
+        const { categories } = await res.json();
+
+        console.log(categories);
+        setCategories(categories);
+      } catch (error) {
+        console.error(error);
+        alert("カテゴリーの取得に失敗しました。再度試してください");
+      }
     };
     fetcher();
-  }, []);
+  }, [token]);
 
   const handleChange = (event: SelectChangeEvent<number[]>) => {
     const selectedIds = event.target.value as number[]; // 選択されたIDの配列を取得

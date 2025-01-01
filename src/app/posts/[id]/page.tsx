@@ -7,7 +7,7 @@ import { useParams } from "next/navigation";
 //Imageは、Next.jsが提供する画像表示用のコンポーネントです。パフォーマンスを最適化し、レスポンシブな画像を簡単に実装できます。
 import Image from "next/image";
 import Link from "next/link";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { supabase } from "@/app/untils/supabase";
 
 export default function Page() {
   const { id } = useParams();
@@ -15,6 +15,9 @@ export default function Page() {
 
   const [post, setPost] = useState<Post | null>(null);
   const [loading, setLoading] = useState(false);
+  const [thumbnailImageUrl, setThumbnailImageUrl] = useState<string | null>(
+    null
+  ); // 画像URLを管理する状態を追加
 
   // APIでpostsを取得する処理をuseEffectで実行します。
   useEffect(() => {
@@ -36,6 +39,26 @@ export default function Page() {
 
   console.log(id); // ここでIDを確認
 
+  // DBに保存しているthumbnailImageKeyを元に、Supabaseから画像のURLを取得する
+  useEffect(() => {
+    if (!post || !post?.thumbnailImageKey) return;
+
+    console.log("thumbnailImageKey:", post.thumbnailImageKey); // ここで値を確認
+
+    const fetcher = async () => {
+      const {
+        data: { publicUrl },
+      } = await supabase.storage
+        .from("post_thumbnail")
+        .getPublicUrl(post.thumbnailImageKey);
+
+      console.log("Generated Public URL:", publicUrl); // 生成されたURLを確認
+      setThumbnailImageUrl(publicUrl);
+    };
+
+    fetcher();
+  }, [post]);
+
   if (loading)
     return (
       <div className="m-5 mx-auto text-center text-sm font-bold">
@@ -48,13 +71,15 @@ export default function Page() {
   return (
     <Link href={`/posts/${post.id}`}>
       <div className="mx-auto my-0 w-96 max-w-3xl">
-        <Image
-          src={post.thumbnailUrl || ""}
-          alt="sampleImage"
-          //ここで画像の高さと幅を書かないとエラーがでる。
-          width={800}
-          height={400}
-        />
+        {thumbnailImageUrl && (
+          <Image
+            src={thumbnailImageUrl} // 取得したURLを使用
+            alt="sampleImage"
+            //ここで画像の高さと幅を書かないとエラーがでる。
+            width={800}
+            height={400}
+          />
+        )}
         <div className="mb-[10px] flex items-center justify-between">
           <div className="mr-1 text-sm text-[#888888]">
             {new Date(post.createdAt).toLocaleDateString()}

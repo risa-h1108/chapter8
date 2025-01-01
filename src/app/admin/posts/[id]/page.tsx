@@ -7,34 +7,38 @@ import { useParams, useRouter } from "next/navigation";
 import { PostForm } from "@/app/admin/_components/PostForm";
 import { Category } from "@/app/types/Category";
 import { Post } from "@/app/types/Post";
+import { useSupabaseSession } from "@/app/_hooks/useSupabaseSession";
 
 export default function Page() {
   //useState(""):初期値を空の文字列に設定
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [thumbnailUrl, setThumbnailUrl] = useState("");
+  const [thumbnailImageKey, setThumbnailImageKey] = useState("");
   const [categories, setCategories] = useState<Category[]>([]);
   //URLに含まれる`id`というパラメータを取得
   const { id } = useParams();
 
   //ページ移動をするための典型文、特定のウェブページの状態管理やルーティングに関連する処理を行うための準備
   const router = useRouter();
+  const { token } = useSupabaseSession(); // useSupabaseSessionからトークンを取得
 
   //`React.FormEvent`:TypeScriptを使っている場合に、`e`がReactのフォームイベントであることを型注釈として指定
   const handleSubmit = async (e: React.FormEvent) => {
     // フォームのデフォルトの動作をキャンセルします。
     e.preventDefault();
+    if (!token) return;
     try {
       // 記事を作成します。
       await fetch(`/api/admin/posts/${id}`, {
         //記事の情報を更新するために`PUT`を使用
         method: "PUT",
         headers: {
+          Authorization: token, //tokenがnullの場合は空文字列を使う
           //送信するデータ(Content-Type コンテンツタイプ)がJSON形式であることを示す
           "Content-Type": "application/json",
         },
         //`JSON.stringify`を使ってJavaScriptオブジェクトをJSON文字列に変換
-        body: JSON.stringify({ title, content, thumbnailUrl, categories }),
+        body: JSON.stringify({ title, content, thumbnailImageKey, categories }),
       });
       alert("記事を更新しました。");
     } catch (error) {
@@ -80,8 +84,16 @@ export default function Page() {
   // これにより、ユーザーがページを開いたときに最新の情報が表示されます。
   useEffect(() => {
     const fetcher = async () => {
+      if (!token) return;
       try {
-        const res = await fetch(`/api/admin/posts/${id}`);
+        const res = await fetch(`/api/admin/posts/${id}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token,
+          },
+        });
+
         if (!res.ok) {
           throw new Error("Failed to fetch data");
         }
@@ -94,7 +106,7 @@ export default function Page() {
 
           setTitle(post.title);
           setContent(post.content);
-          setThumbnailUrl(post.thumbnailUrl);
+          setThumbnailImageKey(post.thumbnailImageKey);
 
           // post.postCategories（サーバーからのレスポンス）からCategory[]（フロントエンドの期待の型）への変換
           const categories = post.postCategories.map((pc) => pc.category);
@@ -109,7 +121,7 @@ export default function Page() {
     };
 
     fetcher();
-  }, [id]);
+  }, [id, token]);
 
   return (
     //mx-auto:横方向の中央揃え
@@ -128,8 +140,8 @@ export default function Page() {
         setTitle={setTitle}
         content={content}
         setContent={setContent}
-        thumbnailUrl={thumbnailUrl}
-        setThumbnailUrl={setThumbnailUrl}
+        thumbnailImageKey={thumbnailImageKey}
+        setThumbnailImageKey={setThumbnailImageKey}
         categories={categories}
         setCategories={setCategories}
         onSubmit={handleSubmit} //ユーザーがフォームを送信

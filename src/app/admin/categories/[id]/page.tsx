@@ -2,14 +2,16 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Post } from "@/app/types/Post";
 import { useParams, useRouter } from "next/navigation";
 import { CategoryForm } from "@/app/admin/categories/_components/CategoryForm";
+import { useSupabaseSession } from "@/app/_hooks/useSupabaseSession";
 
 export default function Page() {
   const [name, setName] = useState("");
   const { id } = useParams();
   const router = useRouter();
+
+  const { token } = useSupabaseSession(); // useSupabaseSessionからトークンを取得
 
   //async(e)=>{e()}の形になる。e：の後にどんな情報なのかを示している
   //`e`は、フォームが送信されたときに自動的に渡される情報を保持
@@ -22,6 +24,7 @@ export default function Page() {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
+          Authorization: token || "",
         },
         body: JSON.stringify({ name }), //カテゴリー名を表示
       });
@@ -60,15 +63,21 @@ export default function Page() {
 
   //`id`が変わるたびにデータを取得するように設定
   useEffect(() => {
+    if (!token) return;
     const fetcher = async () => {
-      const res = await fetch(`/api/admin/categories/${id}`);
+      const res = await fetch(`/api/admin/categories/${id}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token,
+        },
+      });
       const { category } = await res.json();
       // 取得したカテゴリーの名前(category.name)を`setName`関数で状態に保存
       setName(category.name);
     };
 
     fetcher();
-  }, [id]);
+  }, [id, token]);
 
   return (
     <div className="container mx-auto px-4">

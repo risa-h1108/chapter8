@@ -4,7 +4,7 @@ import { PrismaClient } from "@prisma/client";
 //prisma という名前でPrismaクライアントを作成。このクライアントを使ってデータベース操作を行うことができる
 //Prismaクライアント:PrismaというORM（オブジェクトリレーショナルマッピング）ツールを使ってデータベースにアクセスするためのクライアント
 const prisma = new PrismaClient();
-
+// console.log(prisma);
 // GETという命名にすることで、GETリクエストの時にこの関数が呼ばれる
 export const GET = async (request: NextRequest) => {
   //try...(実施/取得内容)catch...（エラー内容）
@@ -31,9 +31,7 @@ export const GET = async (request: NextRequest) => {
         createdAt: "desc",
       },
     });
-
     console.log(posts);
-
     // レスポンスを返す
     return NextResponse.json({ status: "OK", posts: posts }, { status: 200 });
   } catch (error) {

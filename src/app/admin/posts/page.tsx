@@ -3,18 +3,47 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Post } from "@/app/types/Post";
+import { useSupabaseSession } from "@/app/_hooks/useSupabaseSession";
 
 export default function Page() {
   const [posts, setPosts] = useState<Post[]>([]);
+  const [loading, setLoading] = useState(true);
+  const { token } = useSupabaseSession(); // 👈 useSupabaseSessionからtokenを取得
 
   useEffect(() => {
     const fetcher = async () => {
-      const res = await fetch("/api/admin/posts");
+      if (!token) return; //tokenがない場合は何もしない
+      setLoading(true); // 読み込み開始時にローディング状態をtrueに設定
+
+      const res = await fetch("/api/admin/posts", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token, // 👈 Header に token を付与
+        },
+      });
+
+      //APIリクエストの結果をチェックし、リクエストが成功したかどうかを確認する
+      if (!res.ok) {
+        console.error("Failed to fetch posts");
+        setLoading(false); //ローディング状態を解除するために使用（ユーザーに対して読み込み中の表示を終了し、適切なエラーメッセージを表示するため）
+        return;
+      }
+
       const { posts } = await res.json();
-      setPosts(posts);
+      setPosts([...posts]);
+      setLoading(false); // 読み込み完了時にローディング状態をfalseに設定
     };
     fetcher();
-  }, []);
+  }, [token]);
+
+  if (loading)
+    return (
+      <div className="m-5 mx-auto text-center text-sm font-bold">
+        読み込み中...
+      </div>
+    ); // 読み込み中の表示
+
+  if (!posts) return <div className="text-gray-500">まだ記事がありません</div>; // 記事がない場合の表示
 
   return (
     <div>
